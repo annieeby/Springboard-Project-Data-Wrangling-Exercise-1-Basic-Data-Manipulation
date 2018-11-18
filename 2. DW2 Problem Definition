@@ -1,0 +1,21 @@
+Task 1: Opening the file. I have used a workaround for opening the file. I would like it to open directly.
+
+Current code:
+
+    f <- file.choose()
+    d <- read.csv(f)
+    d
+
+Result: File opens and is functional.
+
+Problem: Requires user to navigate to and select the file each time the program runs.
+
+Attempted solution:
+
+    read.csv(file="refine_original.csv", header=TRUE, sep=",")
+    myfile = read.csv([FILE_PATH_FOR_DATACAMP_FOLDER]/titanic3.csv")
+        Note: Issue detecting file path.
+    
+    
+    titanic_clean <- write.table(d)
+write.csv(titanic_clean, file = "titanic_clean.csv")
