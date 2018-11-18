@@ -16,6 +16,16 @@ Attempted solution:
     myfile = read.csv([FILE_PATH_FOR_DATACAMP_FOLDER]/titanic3.csv")
         Note: Issue detecting file path.
     
-    
+Task 2: Export file to CSV.
+
+Current code:
+
     titanic_clean <- write.table(d)
-write.csv(titanic_clean, file = "titanic_clean.csv")
+    write.csv(titanic_clean, file = "titanic_clean.csv")
+
+Result:
+      > write.csv(titanic_clean, file = "titanic_clean.csv")
+      > titanic_clean
+      NULL
+
+Problem: It does not appear to be writing the file.  
