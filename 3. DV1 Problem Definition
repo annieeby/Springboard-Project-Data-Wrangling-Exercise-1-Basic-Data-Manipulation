@@ -1,4 +1,10 @@
-Issue:
+Task 1: Identify issue with code in R Studio. The same code runs and plots with success in the DataCamp IDE. 
+
+Current code: See file named 3. DV1 CHIS.R 
+
+Result: Does not plot. Returns with error messages.
+
+Problem: The file opens but no other code is functional. 
 
 Result:
 
