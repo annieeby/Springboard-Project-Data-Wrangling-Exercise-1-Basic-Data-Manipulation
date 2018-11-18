@@ -1,6 +1,5 @@
-I have used a workaround for opening the file. I would like it to open directly.
 
-Task 1: Opening the file.
+Task 1: Opening the file. I have used a workaround for opening the file. I would like it to open directly.
 
 Current code:
 
@@ -8,13 +7,18 @@ Current code:
     d <- read.csv(f)
     d
 
+Result: File opens and is functional.
+
 Problem: Requires user to navigate to and select the file each time the program runs.
 
-Attempted code:
+Attempted solution:
 
     read.csv(file="refine_original.csv", header=TRUE, sep=",")
     myfile = read.csv([FILE_PATH_FOR_DATACAMP_FOLDER]/refine_original.csv")
+        Note: Issue detecting file path.
     
+
+
 Task 2: Export file to CSV.
 
 Current code:
@@ -22,9 +26,9 @@ Current code:
       refine_clean <- write.table(d5)
       write.csv(refine_clean, file = "refine_clean.csv")
 
-Problem:
-
-It does not appear to be writing the file.
+Result:
       > write.csv(refine_clean, file = "refine_clean.csv")
       > refine_clean
       NULL
+
+Problem: It does not appear to be writing the file.
