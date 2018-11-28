@@ -3,7 +3,7 @@ if(!require(pacman)){install.packages('pacman')}
 pacman::p_load(dplyr, tidyr, ggplot2, ggthemes, reshape2)
 
 # load file from 2009 CHIS Adult.DTA http://healthpolicy.ucla.edu/chis/data/public-use-data-file/Pages/TermsOfUse.aspx?file=/chis/data/public-use-data-file/Documents/chis09_adult_stata.zip
-adult <- ADULT <- read_dta("Documents/Programming Projects/Data Wrangling in R/chis09_adult_stata/chis09_adult_stata/ADULT.dta")
+adult <- read_dta("Documents/Programming Projects/Data Wrangling in R/chis09_adult_stata/chis09_adult_stata/ADULT.dta")
 
 # view class to verify it is a data frame
 class(adult)
