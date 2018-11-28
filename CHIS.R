@@ -1,8 +1,8 @@
 # load libraries
 if(!require(pacman)){install.packages('pacman')}
-pacman::p_load(dplyr, tidyr, ggplot2, ggthemes)
+pacman::p_load(dplyr, tidyr, ggplot2, ggthemes, reshape2)
 
-# load file
+# load file from 2009 CHIS Adult.DTA http://healthpolicy.ucla.edu/chis/data/public-use-data-file/Pages/TermsOfUse.aspx?file=/chis/data/public-use-data-file/Documents/chis09_adult_stata.zip
 adult <- ADULT <- read_dta("Documents/Programming Projects/Data Wrangling in R/chis09_adult_stata/chis09_adult_stata/ADULT.dta")
 
 # view class to verify it is a data frame
@@ -278,17 +278,62 @@ library(dplyr)
 library(ggthemes)
 
 # Script generalized into a function
-mosaicGG
+
+mosaicGG <- function(data, X, FILL) {
+  # Proportions in raw data
+  DF <- as.data.frame.matrix(table(data[[X]], data[[FILL]]))
+  DF$groupSum <- rowSums(DF)
+  DF$xmax <- cumsum(DF$groupSum)
+  DF$xmin <- DF$xmax - DF$groupSum
+  DF$X <- row.names(DF)
+  DF$groupSum <- NULL
+  DF_melted <- melt(DF, id = c("X", "xmin", "xmax"), variable.name = "FILL")
+  DF_melted <- DF_melted %>%
+    group_by(X) %>%
+    mutate(ymax = cumsum(value/sum(value)),
+           ymin = ymax - value/sum(value))
+}
+  
+  # Chi-sq test
+  results <- chisq.test(table(data[[FILL]], data[[X]])) # fill and then x
+  resid <- melt(results$residuals)
+  names(resid) <- c("FILL", "X", "residual")
+  
+  # Merge data
+  DF_all <- merge(DF_melted, resid)
+  
+  # Positions for labels
+  DF_all$xposn <- DF_all$xmin + (DF_all$xmax - DF_all$xmin)/2
+  index <- DF_all$xmax == max(DF_all$xmax)
+  DF_all$yposn <- DF_all$ymin[index] + (DF_all$ymax[index] - DF_all$ymin[index])/2
+  
+  # Plot
+  g <- ggplot(DF_all, aes(ymin = ymin,  ymax = ymax, xmin = xmin,
+                          xmax = xmax, fill = residual)) +
+    geom_rect(col = "white") +
+    geom_text(aes(x = xposn, label = X),
+              y = 1, size = 3, angle = 90, hjust = 1, show.legend = FALSE) +
+    geom_text(aes(x = max(xmax),  y = yposn, label = FILL),
+              size = 3, hjust = 1, show.legend = FALSE) +
+    scale_fill_gradient2("Residuals") +
+    scale_x_continuous("Individuals", expand = c(0,0)) +
+    scale_y_continuous("Proportion", expand = c(0,0)) +
+    theme_tufte() +
+    theme(legend.position = "bottom")
+  print(g)
 
 # BMI described by age
 mosaicGG(adult, X = "SRAGE_P", FILL = "RBMI")
+#Does not plot - No error
 
 # Poverty described by age
 mosaicGG(adult, X = "SRAGE_P", FILL = "POVLL")
+#Does not plot - No error
 
 # mtcars: am described by cyl
 mosaicGG(mtcars, X = "cyl", FILL = "am")
+#Does not plot - No error
 
 # Vocab: vocabulary described by education
-library(carData)
 mosaicGG(Vocab, X = "education", FILL = "vocabulary")
+#Does not plot - Error in table(data[[X]], data[[FILL]]) : object 'Vocab' not found 
